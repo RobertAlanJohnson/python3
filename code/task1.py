@@ -40,7 +40,15 @@ grid = np.c_[xx.ravel(), yy.ravel()]
 # ----------------------------
 n_classifiers = len(classifiers)
 fig, axes = plt.subplots(n_classifiers, 4, figsize=(16, 4 * n_classifiers))
-plt.subplots_adjust(wspace=0.3, hspace=0.3)
+# 核心修复1：调整子图间距，给顶部标题预留空间（增加top参数）
+plt.subplots_adjust(
+    wspace=0.3,    # 水平间距
+    hspace=0.4,    # 垂直间距（增大避免子图间重叠）
+    top=0.92,      # 图的顶部边界（
+    bottom=0.08,   # 底部边界
+    left=0.05,     # 左侧边界
+    right=0.95     # 右侧边界
+)
 
 # 统一颜色：Setosa=red, Versicolor=green, Virginica=blue
 colors = ['red', 'green', 'blue']
@@ -92,8 +100,14 @@ for idx, (name, clf) in enumerate(classifiers.items()):
 # ----------------------------
 # 5. 保存 & 显示
 # ----------------------------
-plt.suptitle('Task 1: Comparison of Classifiers on Iris (2D, 3-class)', 
-             fontsize=14, y=0.99)
-plt.savefig('task1_classifiers_comparison.png', dpi=300, bbox_inches='tight')
-plt.savefig('task1_classifiers_comparison.pdf', bbox_inches='tight')  # LaTeX 友好
+
+plt.suptitle(
+    'Task 1: Comparison of Classifiers on Iris (2D, 3-class)', 
+    fontsize=14, 
+    y=0.98,       
+    weight='bold' 
+)
+
+plt.savefig('task1.png', dpi=300, bbox_inches='tight')
+plt.savefig('task1_classifiers_comparison.pdf', bbox_inches='tight')  
 plt.show()
