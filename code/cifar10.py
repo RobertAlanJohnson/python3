@@ -62,10 +62,6 @@ test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False, num_worker
 # ----------------------------
 # 2. 模型定义与训练
 # ----------------------------
-
-# 修改 ResNet18 以适配 CIFAR-10 的 32×32 输入尺寸：
-#   - 首层卷积核改为 3×3（原为 7×7, stride=2），保留空间分辨率
-#   - 移除 maxpool 层，防止特征图过早缩小
 model = resnet18(pretrained=True)
 model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
 model.maxpool = nn.Identity()
@@ -116,7 +112,7 @@ for epoch in range(20):
         avg_loss = total_loss / len(train_loader)
         print(f"Epoch {epoch+1:2d}/20 | Train Acc: {acc:5.2f}% | Avg Loss: {avg_loss:.4f}")
 
-# 保存训练好的模型参数（仅 state_dict，便于后续加载）
+# 保存训练好的模型参数）
 torch.save(model.state_dict(), 'resnet18_cifar10_lda.pth')
 
 # ----------------------------
@@ -181,7 +177,7 @@ plt.title("2D Feature Projection via LDA with SVM Decision Boundaries", fontsize
 plt.xlabel("LDA Component 1 (Maximizes Between-Class Variance)")
 plt.ylabel("LDA Component 2")
 
-# 添加图例（避免默认色条，使用明确类别名）
+# 添加图例
 from matplotlib.patches import Patch
 legend_elements = [
     Patch(facecolor='#CC0000', edgecolor='k', label='Airplane'),

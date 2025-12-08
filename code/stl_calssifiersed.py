@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')  # 服务器/后台运行
+matplotlib.use('Agg')  
 import matplotlib.pyplot as plt
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.preprocessing import StandardScaler
@@ -18,7 +18,7 @@ import matplotlib.patches as mpatches
 # 1. 配置与数据准备 (适配STL-10 + 增加样本量)
 # ==========================================
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"🚀 正在使用设备: {device} (4090 全力输出)")
+
 
 # STL-10 预处理（96x96原始尺寸，无需Resize）
 transform_train = transforms.Compose([
@@ -58,7 +58,7 @@ test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False, num_worker
 # ==========================================
 # 2. 训练模型 (20轮训练，确保极高分离度)
 # ==========================================
-print("🧠 定义 ResNet18 模型...")
+
 model = resnet18(pretrained=True)
 # STL-10是96x96，调整ResNet适配小尺寸
 model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
@@ -70,7 +70,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=20)
 
-print("🔥 开始 20 轮极速训练 (目标: 极高分离度)...")
+
 epochs = 30
 model.train()
 
@@ -105,7 +105,7 @@ print(f"✅ 训练完成！模型已保存到 {save_path}")
 # ==========================================
 # 3. 核心：LDA降维 (有监督，强制类别分离)
 # ==========================================
-print("📉 提取特征并使用 LDA 进行完美降维...")
+
 feature_extractor = nn.Sequential(*list(model.children())[:-1])
 feature_extractor.eval()
 
@@ -155,17 +155,17 @@ cmap_bold = ListedColormap(['#CC0000', '#0000CC', '#008800'])   # 深红/深蓝/
 # 绘制背景（边界平滑）
 plt.contourf(xx, yy, Z, cmap=cmap_light, alpha=0.8)
 
-# 绘制散点（白边+适中尺寸，不堆积）
+# 绘制散点
 plt.scatter(X_2d[:, 0], X_2d[:, 1], c=y_mapped, cmap=cmap_bold,
             edgecolor='white', linewidth=0.8, s=60, alpha=0.9)
 
-# 标题和标签（参考原样式）
+# 标题和标签
 plt.title("Perfect Classification Boundaries via ResNet18 + LDA\n(STL-10, Maximizing Class Separation)", 
           fontsize=16, fontweight='bold', pad=20)
 plt.xlabel("LDA Component 1 (Most Discriminative Axis)", fontsize=12, labelpad=10)
 plt.ylabel("LDA Component 2 (Second Discriminative Axis)", fontsize=12, labelpad=10)
 
-# 自定义图例（更醒目）
+# 自定义图例（
 patches = [
     mpatches.Patch(color='#CC0000', label='Airplane'),
     mpatches.Patch(color='#0000CC', label='Automobile'),
@@ -179,6 +179,6 @@ plt.grid(True, linestyle='--', alpha=0.3, linewidth=0.5)
 plt.tight_layout()
 
 # 保存高分辨率图
-save_path = 'stl10_perfect_boundary.png'
+save_path = 'stl10.png'
 plt.savefig(save_path, dpi=300, bbox_inches='tight', facecolor='white')
-print(f"✅ 完美分类图已保存: {save_path}")
+print(f"✅ 分类图已保存: {save_path}")

@@ -21,14 +21,12 @@ target_classes = [0, 2, 8]  # 飞机, 汽车, 船
 class_names = ["Airplane", "Automobile", "Ship"]
 label_map = {0: 0, 2: 1, 8: 2} # 映射
 
-# ⚠️ 数据预处理必须与训练时的测试集保持一致
-# 你的训练代码中 test_transform 没有 Resize，使用的是 STL-10 原生 96x96
 transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
 ])
 
-print("⬇️ 加载 STL-10 测试数据用于可视化...")
+
 dataset = datasets.STL10(root='./data', split='test', download=True, transform=transform)
 
 # ==========================================
