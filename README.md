@@ -67,7 +67,8 @@ git clone https://github.com/RobertAlanJohnson/python3.git
 cd python3/code
 
 # 安装依赖（推荐虚拟环境）
-pip install numpy pandas scikit-learn matplotlib seaborn opencv-python torch torchvision
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+pip install numpy pandas scikit-learn matplotlib seaborn opencv-python 
 
 # 依次运行任务
 python task1.py    # → task1.png
